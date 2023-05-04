@@ -1,0 +1,23 @@
+{
+  "name": "duofy-tasks",
+  "version": "1.0.0",
+  "description": "Duofy Tasks Project",
+  "scripts": {
+    "dev:database": "docker-compose -f docker-compose.dev.yml up --build -d",
+    "dev:backend": "cd packages/backend && npm run dev",
+    "dev:frontend": "cd packages/frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:database\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "install:backend": "cd packages/backend && npm install",
+    "install:frontend": "cd packages/frontend && npm install",
+    "install:all": " npm install && npm run install:backend && npm run install:frontend",
+    "test:backend": "cd packages/backend && npm run test && npm run test:e2e",
+    "test": " npm run test:backend",
+    "start": "npm t && docker-compose up --build -d"
+  },
+  "keywords": [],
+  "author": "Fabricio Ferreira Santos",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}

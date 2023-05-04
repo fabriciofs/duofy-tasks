@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:13-alpine
+    command: [ "postgres", "-c", "log_statement=all" ]
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PWS}
+      POSTGRES_DB: ${DB_NAME}
