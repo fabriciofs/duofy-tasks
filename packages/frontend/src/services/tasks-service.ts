@@ -1,7 +1,7 @@
 import HttpClient from "../infra/httpClient";
 
 export type Task = {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   dueDate: string;
@@ -12,21 +12,32 @@ export type Task = {
 export class TasksService {
   private tasks: Task[];
   private endPoint = "/tasks";
-  constructor(private readonly httpCliente: HttpClient) {
+  constructor(private readonly httpClient: HttpClient) {
     this.tasks = [];
   }
 
   async getTasks(): Promise<Task[]> {
-    this.tasks = await this.httpCliente.get<Task[]>(this.endPoint);
+    this.tasks = await this.httpClient.get<Task[]>(this.endPoint);
     return this.tasks;
   }
-  async toggleTaskCompletion(id: string) {
-    console.log({ id });
+
+  async toggleTaskDone(data: Task) {
+    return await this.httpClient.put(`${this.endPoint}/${data.id}`, {
+      isDone: !data.isDone,
+    });
   }
-  async editTask(id: string, data: Task) {
-    console.log({ id, data });
+
+  async addTask(data: Task) {
+    return await this.httpClient.post(this.endPoint, data);
   }
+
+  async editTask(data: Task) {
+    const { id } = data;
+    delete data.id;
+    return await this.httpClient.put(`${this.endPoint}/${id}`, data);
+  }
+
   async deleteTask(id: string) {
-    console.log({ id });
+    await this.httpClient.delete(`${this.endPoint}/${id}`);
   }
 }

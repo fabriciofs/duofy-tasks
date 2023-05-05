@@ -1,9 +1,8 @@
-version: '3.8'
+version: '3.9'
 
 services:
   backend:
-    build:
-      context: ./packages/backend
+    build: ./packages/backend
     depends_on:
       - database
     ports:
@@ -16,15 +15,14 @@ services:
       DB_NAME: ${DB_NAME}
 
   frontend:
-    build: ./packages/frontend
+    build:
+      context: ./packages/frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
     depends_on:
       - backend    
     ports:
       - '80:80'
-    environment:
-      VITE_API_BASE_URL : ${API_BASE_URL}
-    links:
-        - backend
 
   database:
     image: postgres:13-alpine

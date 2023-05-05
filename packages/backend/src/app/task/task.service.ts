@@ -10,18 +10,25 @@ import { TaskEntity } from './entity/task.entity';
 export class TaskService {
   constructor(
     @InjectRepository(TaskEntity)
-    private readonly taskRepository: Repository<TaskEntity>) { }
+    private readonly taskRepository: Repository<TaskEntity>,
+  ) {}
 
   async findAll() {
-    return await this.taskRepository.find()
+    return await this.taskRepository.find({
+      order: {
+        isDone: 'ASC',
+        priority: 'ASC',
+        dueDate: 'ASC',
+      },
+    });
   }
 
   async findOneOrFail(id: string) {
     try {
       return await this.taskRepository.findOneOrFail({
         where: {
-          id
-        }
+          id,
+        },
       });
     } catch (error) {
       throw new NotFoundException(error.message);
@@ -29,7 +36,7 @@ export class TaskService {
   }
 
   async create(data: CreateTaskDto) {
-    return await this.taskRepository.save(this.taskRepository.create(data))
+    return await this.taskRepository.save(this.taskRepository.create(data));
   }
 
   async update(id: string, data: UpdateTaskDto) {
@@ -38,7 +45,7 @@ export class TaskService {
       this.taskRepository.merge(task, data);
       return await this.taskRepository.save(task);
     } catch (error) {
-      throw new NotFoundException(error.message)
+      throw new NotFoundException(error.message);
     }
   }
 
@@ -47,7 +54,7 @@ export class TaskService {
       await this.findOneOrFail(id);
       return await this.taskRepository.softDelete(id);
     } catch (error) {
-      throw new NotFoundException(error.message)
+      throw new NotFoundException(error.message);
     }
   }
 
@@ -58,11 +65,11 @@ export class TaskService {
       where: {
         dueDate: LessThanOrEqual(threeDaysFromNow),
         isDone: false,
-        priority: 'LOW'
+        priority: 'LOW',
       },
     });
     tasksToUpdate.forEach((task) => {
-      task.priority = "HIGH";
+      task.priority = 'HIGH';
     });
     await this.taskRepository.save(tasksToUpdate);
   }
