@@ -5,6 +5,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TaskLazyModule } from './app/task/task.lazy.module';
+import { UserLazyModule } from './app/user/user.lazy.module';
 import { CacheInterceptor } from './cache/cache.interceptor';
 
 @Module({
@@ -25,6 +26,7 @@ import { CacheInterceptor } from './cache/cache.interceptor';
     }),
     ScheduleModule.forRoot(),
     TaskLazyModule(),
+    UserLazyModule(),
   ],
   controllers: [],
   providers: [
