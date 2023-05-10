@@ -21,23 +21,23 @@ export class TasksService {
     return this.tasks;
   }
 
-  async toggleTaskDone(data: Task) {
+  async toggleTaskDone(data: Task): Promise<Task> {
     return await this.httpClient.put(`${this.endPoint}/${data.id}`, {
       isDone: !data.isDone,
     });
   }
 
-  async addTask(data: Task) {
+  async addTask(data: Task): Promise<Task> {
     return await this.httpClient.post(this.endPoint, data);
   }
 
-  async editTask(data: Task) {
+  async editTask(data: Task): Promise<Task> {
     const { id } = data;
     delete data.id;
     return await this.httpClient.put(`${this.endPoint}/${id}`, data);
   }
 
-  async deleteTask(id: string) {
+  async deleteTask(id: string): Promise<void> {
     await this.httpClient.delete(`${this.endPoint}/${id}`);
   }
 }

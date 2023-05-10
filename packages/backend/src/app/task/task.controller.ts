@@ -16,6 +16,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { IndexTaskSwagger } from './swagger/index-task.swagger';
 import { TaskService } from './task.service';
+import { TaskEntity } from './entity/task.entity';
 
 @Controller('api/v1/tasks')
 @ApiTags('tasks')
@@ -30,7 +31,7 @@ export class TaskController {
     type: IndexTaskSwagger,
     isArray: true,
   })
-  async index() {
+  async index(): Promise<TaskEntity[]> {
     return await this.taskService.findAll();
   }
 
@@ -38,7 +39,7 @@ export class TaskController {
   @ApiOperation({ summary: 'Adicionar uma nova tarefa' })
   @ApiResponse({ status: 201, description: 'Nova tarefa criada com sucesso' })
   @ApiResponse({ status: 400, description: 'Parâmetros inválidos' })
-  async create(@Body() body: CreateTaskDto) {
+  async create(@Body() body: CreateTaskDto): Promise<TaskEntity> {
     return await this.taskService.create(body);
   }
 
@@ -49,7 +50,9 @@ export class TaskController {
     description: 'Dados de uma tarefa retornados com sucesso',
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
-  async show(@Param('id', new ParseUUIDPipe()) id: string) {
+  async show(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<TaskEntity> {
     return await this.taskService.findOneOrFail(id);
   }
 
@@ -60,7 +63,7 @@ export class TaskController {
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() body: UpdateTaskDto,
-  ) {
+  ): Promise<TaskEntity> {
     return await this.taskService.update(id, body);
   }
 
@@ -69,7 +72,7 @@ export class TaskController {
   @ApiOperation({ summary: 'Remover uma tarefa' })
   @ApiResponse({ status: 204, description: 'Tarefa removida com sucesso' })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
-  async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
+  async destroy(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     await this.taskService.deleteById(id);
   }
 }

@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import request from 'supertest';
 
 import { TaskModule } from '../src/app/task/task.module';
+import { CreateTaskDto } from 'src/app/task/dto/create-task.dto';
 
 describe('TaskController (e2e)', () => {
   let app: INestApplication;
   let createTaskId: string;
-  const newTask = {
+  const newTask: CreateTaskDto = {
     title: 'task-1',
     description: 'Description task-1',
     dueDate: new Date(),

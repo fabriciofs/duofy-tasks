@@ -23,7 +23,7 @@ export class TaskService {
     });
   }
 
-  async findOneOrFail(id: string) {
+  async findOneOrFail(id: string): Promise<TaskEntity> {
     try {
       return await this.taskRepository.findOneOrFail({
         where: {
@@ -35,11 +35,11 @@ export class TaskService {
     }
   }
 
-  async create(data: CreateTaskDto) {
+  async create(data: CreateTaskDto): Promise<TaskEntity> {
     return await this.taskRepository.save(this.taskRepository.create(data));
   }
 
-  async update(id: string, data: UpdateTaskDto) {
+  async update(id: string, data: UpdateTaskDto): Promise<TaskEntity> {
     try {
       const task = await this.findOneOrFail(id);
       this.taskRepository.merge(task, data);
@@ -49,10 +49,10 @@ export class TaskService {
     }
   }
 
-  async deleteById(id: string) {
+  async deleteById(id: string): Promise<void> {
     try {
       await this.findOneOrFail(id);
-      return await this.taskRepository.softDelete(id);
+      await this.taskRepository.softDelete(id);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
