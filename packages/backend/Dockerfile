@@ -8,6 +8,8 @@ RUN npm ci
 
 COPY . .
 
+RUN npm run test:build
+
 RUN npm run build
 
 EXPOSE 3000
