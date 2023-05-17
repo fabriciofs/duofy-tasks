@@ -4,7 +4,9 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { TaskEntity } from './app/task/entities/task.entity';
 import { TaskLazyModule } from './app/task/task.lazy.module';
+import { UserEntity } from './app/user/entities/user.entity';
 import { UserLazyModule } from './app/user/user.lazy.module';
 import { CacheInterceptor } from './cache/cache.interceptor';
 
@@ -20,7 +22,7 @@ import { CacheInterceptor } from './cache/cache.interceptor';
         username: configSerice.get('DB_USER', 'postgres'),
         password: configSerice.get('DB_PWS', 'postgres'),
         database: configSerice.get('DB_NAME', 'tasks'),
-        entities: [__dirname + '/**/*.entity{.js,.ts}'],
+        entities: [UserEntity, TaskEntity],
         synchronize: true,
       }),
     }),
@@ -36,4 +38,4 @@ import { CacheInterceptor } from './cache/cache.interceptor';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

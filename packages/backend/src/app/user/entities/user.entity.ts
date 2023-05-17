@@ -1,22 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TaskEntity } from 'src/app/task/entity/task.entity';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { TaskEntity } from '../../task/entities/task.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'users' })
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   @ApiProperty()
   email: string;
 
@@ -28,6 +20,9 @@ export class UserEntity {
   @ApiProperty()
   password: string;
 
+  @OneToMany(() => TaskEntity, task => task.user)
+  tasks: TaskEntity[];
+
   @CreateDateColumn({ name: 'created_at', select: false })
   createdAt: Date;
 
@@ -37,6 +32,14 @@ export class UserEntity {
   @DeleteDateColumn({ name: 'deleted_at', select: false })
   deletedAt: Date;
 
-  @OneToMany(() => TaskEntity, (task) => task.user)
-  tasks: TaskEntity[];
+  constructor(user?: Partial<UserEntity>) {
+    this.id = user?.id;
+    this.email = user?.email;
+    this.name = user?.name;
+    this.password = user?.password;
+    this.tasks = user?.tasks;
+    this.createdAt = user?.createdAt;
+    this.updatedAt = user?.updatedAt;
+    this.deletedAt = user?.deletedAt;
+  }
 }

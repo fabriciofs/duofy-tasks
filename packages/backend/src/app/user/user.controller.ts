@@ -1,69 +1,62 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
 import { IndexUserSwagger } from './swagger/index-user.swagger';
 import { UserService } from './user.service';
 
-@Controller('api/v1/users')
+@Controller('api/user')
 @ApiTags('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos usuários' })
+  @ApiOperation({ summary: 'List all users' })
   @ApiResponse({
     status: 200,
-    description: 'Lista de usuários retornada com sucesso',
+    description: 'All users returned successfully',
     type: IndexUserSwagger,
     isArray: true,
   })
-  findAll() {
+  findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 
   @Post()
-  @ApiOperation({ summary: 'Adicionar um novo usuário' })
-  @ApiResponse({ status: 201, description: 'Novo usuário criado com sucesso' })
-  @ApiResponse({ status: 400, description: 'Parâmetros inválidos' })
-  create(@Body() createUserDto: CreateUserDto) {
+  @ApiOperation({ summary: 'Add new user' })
+  @ApiResponse({ status: 201, description: 'New task created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid parameters' })
+  create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.userService.create(createUserDto);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Exibir um usuário' })
+  @ApiOperation({ summary: 'Get an user' })
   @ApiResponse({
     status: 200,
-    description: 'Dados do usuário retornados com sucesso',
+    description: 'User returned successfully',
+    type: IndexUserSwagger,
   })
-  findOne(@Param('id') id: string) {
+  @ApiResponse({ status: 404, description: 'User not found' })
+  findOneOrFail(@Param('id', new ParseUUIDPipe()) id: string): Promise<UserEntity> {
     return this.userService.findOneOrFail(id);
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar um usuário' })
-  @ApiResponse({ status: 201, description: 'Usuário atualizado com sucesso' })
-  @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
+  @ApiOperation({ summary: 'Update an user' })
+  @ApiResponse({ status: 201, description: 'User updated successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Remover um usuário' })
-  @ApiResponse({ status: 204, description: 'Usuário removido com sucesso' })
-  @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
+  @ApiOperation({ summary: 'Delete an user' })
+  @ApiResponse({ status: 204, description: 'User deleted successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   remove(@Param('id') id: string) {
     return this.userService.deleteById(id);
   }
