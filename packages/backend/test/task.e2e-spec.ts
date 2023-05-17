@@ -34,9 +34,9 @@ describe('TaskController (e2e)', () => {
     await app.init();
   });
 
-  it('/api/v1/tasks (POST)', async () => {
+  it('/api/tasks (POST)', async () => {
     const response = await request(app.getHttpServer())
-      .post('/api/v1/tasks')
+      .post('/api/tasks')
       .send(newTask)
       .expect(201);
     createTaskId = response.body.id;
@@ -49,13 +49,13 @@ describe('TaskController (e2e)', () => {
       deletedAt: null,
     });
   });
-  it('/api/v1/tasks (GET)', () => {
-    return request(app.getHttpServer()).get('/api/v1/tasks').expect(200);
+  it('/api/tasks (GET)', () => {
+    return request(app.getHttpServer()).get('/api/tasks').expect(200);
   });
 
-  it('/api/v1/tasks/:id (GET)', async () => {
+  it('/api/tasks/:id (GET)', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/api/v1/tasks/${createTaskId}`)
+      .get(`/api/tasks/${createTaskId}`)
       .expect(200);
     expect(response.body).toEqual({
       id: createTaskId,
@@ -64,9 +64,9 @@ describe('TaskController (e2e)', () => {
     });
   });
 
-  it('/api/v1/tasks/:id (PUT)', async () => {
+  it('/api/tasks/:id (PUT)', async () => {
     const response = await request(app.getHttpServer())
-      .put(`/api/v1/tasks/${createTaskId}`)
+      .put(`/api/tasks/${createTaskId}`)
       .send({ isDone: true })
       .expect(200);
     expect(response.body).toEqual({
@@ -79,9 +79,9 @@ describe('TaskController (e2e)', () => {
     });
   });
 
-  it('/api/v1/tasks/:id (DELETE)', () => {
+  it('/api/tasks/:id (DELETE)', () => {
     return request(app.getHttpServer())
-      .delete(`/api/v1/tasks/${createTaskId}`)
+      .delete(`/api/tasks/${createTaskId}`)
       .expect(204);
   });
 

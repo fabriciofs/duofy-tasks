@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskEntity } from './entity/task.entity';
+import { TaskEntity } from './entities/task.entity';
 import { TaskController } from './task.controller';
 import { TaskService } from './task.service';
 
@@ -80,9 +80,9 @@ describe('TaskController', () => {
     expect(taskService).toBeDefined();
   });
 
-  describe('index', () => {
+  describe('findAll', () => {
     it('shoud return a task list entity successfully', async () => {
-      const result = await taskController.index();
+      const result = await taskController.findAll();
       expect(result).toEqual(taskEntityList);
       expect(taskService.findAll).toHaveBeenCalledTimes(1);
     });
@@ -107,9 +107,9 @@ describe('TaskController', () => {
     });
   });
 
-  describe('show', () => {
+  describe('findOneOrFail', () => {
     it('shoud show a task item successfully', async () => {
-      const result = await taskController.show('1');
+      const result = await taskController.findOneOrFail('1');
       expect(result).toEqual(taskEntityList[0]);
       expect(taskService.findOneOrFail).toHaveBeenCalledTimes(1);
       expect(taskService.findOneOrFail).toHaveBeenCalledWith('1');
@@ -128,7 +128,7 @@ describe('TaskController', () => {
 
   describe('destroy', () => {
     it('shoud delete a task item successfully', async () => {
-      const result = await taskController.destroy('1');
+      const result = await taskController.remove('1');
       expect(result).toBeUndefined();
       expect(taskService.deleteById).toHaveBeenCalledTimes(1);
       expect(taskService.deleteById).toHaveBeenCalledWith('1');

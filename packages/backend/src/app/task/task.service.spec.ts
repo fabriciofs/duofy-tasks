@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskEntity } from './entity/task.entity';
+import { TaskEntity } from './entities/task.entity';
 import { TaskService } from './task.service';
 
 const taskEntityList: TaskEntity[] = [
@@ -89,7 +89,7 @@ describe('TaskService', () => {
   });
 
   describe('create', () => {
-    it('should create a new entity item successfully', async () => {
+    it('should create a new task successfully', async () => {
       const data: CreateTaskDto = {
         title: 'new-task',
         description: 'Description new-task',

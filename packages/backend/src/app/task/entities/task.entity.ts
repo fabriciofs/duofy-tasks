@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/app/user/entities/user.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -35,6 +35,10 @@ export class TaskEntity {
   @ApiProperty()
   isDone: boolean;
 
+  @ManyToOne(() => UserEntity, user => user.tasks)
+  @ApiProperty()
+  user: UserEntity;
+
   @CreateDateColumn({ name: 'created_at', select: false })
   createdAt: Date;
 
@@ -44,9 +48,6 @@ export class TaskEntity {
   @DeleteDateColumn({ name: 'deleted_at', select: false })
   deletedAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.tasks)
-  user: UserEntity;
-
   constructor(task?: Partial<TaskEntity>) {
     this.id = task?.id;
     this.title = task?.title;
@@ -54,7 +55,6 @@ export class TaskEntity {
     this.dueDate = task?.dueDate;
     this.priority = task?.priority;
     this.isDone = task?.isDone;
-    this.user = task?.user;
     this.createdAt = task?.createdAt;
     this.updatedAt = task?.updatedAt;
     this.deletedAt = task?.deletedAt;

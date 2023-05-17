@@ -4,14 +4,14 @@ import { LessThanOrEqual, Repository } from 'typeorm';
 
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskEntity } from './entity/task.entity';
+import { TaskEntity } from './entities/task.entity';
 
 @Injectable()
 export class TaskService {
   constructor(
     @InjectRepository(TaskEntity)
     private readonly taskRepository: Repository<TaskEntity>,
-  ) {}
+  ) { }
 
   async findAll() {
     return await this.taskRepository.find({

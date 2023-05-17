@@ -17,7 +17,6 @@ export class CacheInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const cachedData = uuid ? this.cache.get(key) : null;
     if (request.method === 'GET' && cachedData) {
-      console.log({ cachedData });
       return of(cachedData);
     }
     return next.handle().pipe(

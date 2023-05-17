@@ -9,57 +9,59 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskEntity } from './entities/task.entity';
 import { IndexTaskSwagger } from './swagger/index-task.swagger';
 import { TaskService } from './task.service';
-import { TaskEntity } from './entity/task.entity';
 
-@Controller('api/v1/tasks')
+@Controller('api/tasks')
 @ApiTags('tasks')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(private readonly taskService: TaskService) { }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as tarefas' })
+  @ApiOperation({ summary: 'List all tasks' })
   @ApiResponse({
     status: 200,
-    description: 'Lista de Tarefas retornada com sucesso',
+    description: 'All tasks returned successfully',
     type: IndexTaskSwagger,
     isArray: true,
   })
-  async index(): Promise<TaskEntity[]> {
+  async findAll(): Promise<TaskEntity[]> {
     return await this.taskService.findAll();
   }
 
   @Post()
-  @ApiOperation({ summary: 'Adicionar uma nova tarefa' })
-  @ApiResponse({ status: 201, description: 'Nova tarefa criada com sucesso' })
-  @ApiResponse({ status: 400, description: 'Parâmetros inválidos' })
+  @ApiOperation({ summary: 'Add new task' })
+  @ApiResponse({ status: 201, description: 'New task created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid parameters' })
   async create(@Body() body: CreateTaskDto): Promise<TaskEntity> {
     return await this.taskService.create(body);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Exibir uma tarefa' })
+  @ApiOperation({ summary: 'Get one task' })
   @ApiResponse({
     status: 200,
-    description: 'Dados de uma tarefa retornados com sucesso',
+    description: 'Task returned successfully',
+    type: IndexTaskSwagger,
   })
-  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
-  async show(
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async findOneOrFail(
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<TaskEntity> {
     return await this.taskService.findOneOrFail(id);
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar uma tarefa' })
-  @ApiResponse({ status: 201, description: 'Tarefa atualizada com sucesso' })
-  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiOperation({ summary: 'Update a task' })
+  @ApiResponse({ status: 201, description: 'Task updated successfully' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() body: UpdateTaskDto,
@@ -69,10 +71,10 @@ export class TaskController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Remover uma tarefa' })
-  @ApiResponse({ status: 204, description: 'Tarefa removida com sucesso' })
-  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
-  async destroy(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+  @ApiOperation({ summary: 'Delete a task' })
+  @ApiResponse({ status: 204, description: 'Task deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async remove(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     await this.taskService.deleteById(id);
   }
 }
