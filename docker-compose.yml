@@ -13,6 +13,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PWS: ${DB_PWS}
       DB_NAME: ${DB_NAME}
+      SECRET_KEY: ${SECRET_KEY}
 
   frontend:
     build:
@@ -30,6 +31,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PWS}
       POSTGRES_DB: ${DB_NAME}
+      SECRET_KEY: ${SECRET_KEY}
     volumes:
       - db_data:/var/lib/postgresql/data
 

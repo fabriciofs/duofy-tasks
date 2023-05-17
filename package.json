@@ -7,6 +7,7 @@
     "dev:backend": "cd packages/backend && npm run dev",
     "dev:frontend": "cd packages/frontend && npm start",
     "dev": "concurrently \"npm run dev:database\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:container": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "install:backend": "cd packages/backend && npm install",
     "install:frontend": "cd packages/frontend && npm install",
     "install:all": " npm install && npm run install:backend && npm run install:frontend",

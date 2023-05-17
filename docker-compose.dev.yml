@@ -1,6 +1,23 @@
-version: '3.8'
+version: '3'
 
 services:
+  devenv:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - .:/home/node/app
+    environment:
+      DB_HOST: database
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PWS: ${DB_PWS}
+      DB_NAME: ${DB_NAME}      
+      SECRET_KEY: ${SECRET_KEY}      
+
   database:
     image: postgres:13-alpine
     command: [ "postgres", "-c", "log_statement=all" ]
