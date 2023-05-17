@@ -22,7 +22,7 @@ import { CacheInterceptor } from './cache/cache.interceptor';
         username: configSerice.get('DB_USER', 'postgres'),
         password: configSerice.get('DB_PWS', 'postgres'),
         database: configSerice.get('DB_NAME', 'tasks'),
-        entities: [UserEntity, TaskEntity],
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
       }),
     }),
