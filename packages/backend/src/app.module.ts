@@ -12,19 +12,16 @@ import { CacheInterceptor } from './cache/cache.interceptor';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configSerice: ConfigService) => ({
-        type: 'postgres',
-        host: configSerice.get('DB_HOST', 'localhost'),
-        port: Number(configSerice.get('DB_PORT', 5432)),
-        username: configSerice.get('DB_USER', 'postgres'),
-        password: configSerice.get('DB_PWS', 'postgres'),
-        database: configSerice.get('DB_NAME', 'tasks'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST ?? 'localhost',
+      port: Number(process.env.DB_PORT) ?? 5432,
+      username: process.env.DB_USER ?? 'postgres',
+      password: process.env.DB_PWS ?? 'postgres',
+      database: process.env.DB_NAME ?? 'tasks',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
     }),
     ScheduleModule.forRoot(),
     TaskLazyModule(),
