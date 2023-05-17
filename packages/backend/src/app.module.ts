@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import { TaskEntity } from './app/task/entities/task.entity';
 import { TaskLazyModule } from './app/task/task.lazy.module';
-import { UserEntity } from './app/user/entities/user.entity';
 import { UserLazyModule } from './app/user/user.lazy.module';
 import { CacheInterceptor } from './cache/cache.interceptor';
 
@@ -22,7 +20,7 @@ import { CacheInterceptor } from './cache/cache.interceptor';
       database: process.env.DB_NAME ?? 'tasks',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-    }),
+    } as TypeOrmModuleOptions),
     ScheduleModule.forRoot(),
     TaskLazyModule(),
     UserLazyModule(),
