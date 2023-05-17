@@ -11,12 +11,12 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      DB_HOST: database
+      DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_USER: ${DB_USER}
       DB_PWS: ${DB_PWS}
-      DB_NAME: ${DB_NAME}      
-      SECRET_KEY: ${SECRET_KEY}      
+      DB_NAME: ${DB_NAME}
+      SECRET_KEY: ${SECRET_KEY}
 
   database:
     image: postgres:13-alpine
